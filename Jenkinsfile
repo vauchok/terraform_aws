@@ -8,8 +8,10 @@ node('slave') {
         }
         catch (Exception e){
             slack_notification ("${BUILD_TAG} Failed <Pull from Git> stage", "#jenkins-notification", "Ihar Vauchok")
+            slackSend color: 'danger', message: "${BUILD_TAG} Failed <Pull from Git> stage"
             throw e
         }
+        slackSend color: 'good', message: "${BUILD_TAG} Success <Pull from Git> stage"
     }
 
     stage('terraform check/init') {
@@ -21,19 +23,22 @@ node('slave') {
         }
         catch (Exception e){
             slack_notification ("${BUILD_TAG} Failed <terraform check/init> stage", "#jenkins-notification", "Ihar Vauchok")
+            slackSend color: 'danger', message: "${BUILD_TAG} Failed <terraform check/init> stage"
             throw e
         }
+        slackSend color: 'good', message: "${BUILD_TAG} Success <terraform check/init> stage"
     }
 
     stage('terraform plan') {
         try {
             sh 'terraform plan'
-            slackSend color: 'good', message: 'Message from Jenkins Pipeline'
         }
         catch (Exception e){
             slack_notification ("${BUILD_TAG} Failed <terraform plan> stage", "#jenkins-notification", "Ihar Vauchok")
+            slackSend color: 'danger', message: "${BUILD_TAG} Failed <terraform plan> stage"
             throw e
         }
+        slackSend color: 'good', message: "${BUILD_TAG} Success <terraform plan> stage"
     }
   
     stage('terraform apply') {
@@ -42,8 +47,10 @@ node('slave') {
         }
         catch (Exception e){
             slack_notification ("${BUILD_TAG} Failed <terraform apply> stage", "#jenkins-notification", "Ihar Vauchok")
+            slackSend color: 'danger', message: "${BUILD_TAG} Failed <terraform apply> stage"
             throw e
         }
+        slackSend color: 'good', message: "${BUILD_TAG} Success <terraform apply> stage"
     }
   
     stage('terraform destroy') {
@@ -52,12 +59,15 @@ node('slave') {
         }
         catch (Exception e){
             slack_notification ("${BUILD_TAG} Failed <terraform destroy> stage", "#jenkins-notification", "Ihar Vauchok")
+            slackSend color: 'danger', message: "${BUILD_TAG} Failed <terraform destroy> stage"
             throw e
         }
+        slackSend color: 'good', message: "${BUILD_TAG} Success <terraform destroy> stage"
     }
   
   stage('Sending status') {
         slack_notification ("${BUILD_TAG} Success!!!", "#jenkins-notification", "Ihar Vauchok")
+        slackSend color: 'good', message: "${BUILD_TAG} Success deploy!!!"
   }
 }
 
