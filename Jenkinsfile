@@ -66,6 +66,6 @@ node('slave') {
 }
 
 def slack_notification (message, tag) {
-    if ($tag = 'Failed') slackSend color: 'danger', message: "${BUILD_TAG} ${tag} ${message} stage"
+  if ($tag == 'Failed') slackSend color: 'danger', message: "${BUILD_TAG} ${tag} ${message} stage"
     else slackSend color: 'good', message: "${BUILD_TAG} ${tag} ${message} stage"
 }
