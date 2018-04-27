@@ -9,21 +9,21 @@ node('slave') {
     }
 }
 
-def step (message, cmd) {
-    stage(message) {
+def step (msg, cmd) {
+    stage(msg) {
         try {
             if (cmd == 'git') checkout scm
             else sh "${cmd}"
         }
         catch (Exception e){
-            slack_notification (message, 'Failed')
+            slack_notification (msg, 'Failed')
             throw e
         }
-        slack_notification (message, 'Success')
+        slack_notification (msg, 'Success')
     }
 }
 
-def slack_notification (message, tag) {
-    if (tag == 'Failed') slackSend color: 'danger', message: "${BUILD_TAG} ${tag} ${message} stage"
-    else slackSend color: 'good', message: "${BUILD_TAG} ${tag} ${message} stage"
+def slack_notification (msg, tag) {
+    if (tag == 'Failed') slackSend color: 'danger', message: "${BUILD_TAG} ${tag} ${msg} stage"
+    else slackSend color: 'good', message: "${BUILD_TAG} ${tag} ${msg} stage"
 }
