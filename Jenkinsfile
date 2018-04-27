@@ -1,9 +1,6 @@
 node('slave') {
     step('Pull from Git', git())
-    step('Terraform check/init', "sh '''
-                  terraform -v
-                  terraform init
-                '''")
+    step('Terraform init', "sh terraform init")
     step('Terraform plan', "sh 'terraform plan'")
     step('Terraform apply', "sh 'terraform apply -auto-approve'")
     step('Terraform destroy', "sh 'terraform destroy -auto-approve'")
