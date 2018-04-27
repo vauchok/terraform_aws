@@ -1,5 +1,5 @@
 node('slave') {
-    step('Pull from Git', "checkout scm: [$class: 'GitSCM', branches: [[name: 'master']], userRemoteConfigs: [[url: 'https://github.com/vauchok/terraform_aws.git/']]]")
+    step('Pull from Git', "checkout scm: [${class}: 'GitSCM', branches: [[name: 'master']], userRemoteConfigs: [[url: 'https://github.com/vauchok/terraform_aws.git/']]]")
     step('Terraform check/init', "sh '''
                   terraform -v
                   terraform init
