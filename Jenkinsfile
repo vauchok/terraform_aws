@@ -1,7 +1,7 @@
 node('slave') {
     stage('Pull from Git') {
         try {
-            checkout scm: [$class: 'GitSCM', branches: [[name: 'master']], userRemoteConfigs: [[url: 'https://github.com/vauchok/terraform_aws.git/']]]
+            checkout scm
         }
         catch (Exception e){
             slack_notification ('Pull from Git', 'Failed')
