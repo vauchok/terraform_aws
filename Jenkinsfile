@@ -54,6 +54,10 @@ node('slave') {
             throw e
         }
     }
+  
+  stage('Sending status') {
+        slack_notification ("${BUILD_TAG} Success!!!", "#jenkins-notification", "Ihar Vauchok")
+  }
 }
 
 
