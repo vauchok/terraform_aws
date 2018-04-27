@@ -5,7 +5,7 @@ node('slave') {
     step('Terraform apply', "terraform apply -auto-approve")
     step('Terraform destroy', "terraform destroy -auto-approve")
     stage('Sending status') {
-        slackSend color: 'good', message: "${BUILD_TAG} Successful deployment!"
+        slackSend color: 'good', message: "${BUILD_TAG}${BUILD_TIMESTAMP} Successful deployment!"
     }
 }
 
@@ -24,6 +24,6 @@ def step (msg, cmd) {
 }
 
 def slack_notification (msg, tag) {
-    if (tag == 'Failed') slackSend color: 'danger', message: "${BUILD_TAG} ${tag} ${msg} stage"
-    else slackSend color: 'good', message: "${BUILD_TAG} ${tag} ${msg} stage"
+    if (tag == 'Failed') slackSend color: 'danger', message: "${BUILD_TAG}${BUILD_TIMESTAMP} ${tag} ${msg} stage"
+    else slackSend color: 'good', message: "${BUILD_TAG}${BUILD_TIMESTAMP} ${tag} ${msg} stage"
 }
