@@ -1,5 +1,14 @@
 node('slave') {
-    step('Pull from Git', git())
+    stage('Pull from Git') {
+        try {
+            checkout scm: [$class: 'GitSCM', branches: [[name: 'master']], userRemoteConfigs: [[url: 'https://github.com/vauchok/terraform_aws.git/']]]
+        }
+        catch (Exception e){
+            slack_notification ('Pull from Git', 'Failed')
+            throw e
+        }
+        slack_notification ('Pull from Git', 'Success')
+    }
     step('Terraform init', "terraform init")
     step('Terraform plan', "terraform plan")
     step('Terraform apply', "terraform apply -auto-approve")
@@ -26,8 +35,4 @@ def step (message, cmd) {
 def slack_notification (message, tag) {
     if (tag == 'Failed') slackSend color: 'danger', message: "${BUILD_TAG} ${tag} ${message} stage"
     else slackSend color: 'good', message: "${BUILD_TAG} ${tag} ${message} stage"
-}
-
-def git () {
-    checkout scm: [$class: 'GitSCM', branches: [[name: 'master']], userRemoteConfigs: [[url: 'https://github.com/vauchok/terraform_aws.git/']]]
 }
