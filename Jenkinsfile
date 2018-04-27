@@ -1,4 +1,5 @@
 node('slave') {
+    slackSend color: '#439FE0', message: "${BUILD_TAG}_${BUILD_TIMESTAMP} started"
     step('Pull from Git', "git")
     step('Terraform init', "terraform init")
     step('Terraform plan', "terraform plan")
@@ -24,6 +25,6 @@ def step (msg, cmd) {
 }
 
 def slack_notification (msg, tag) {
-    if (tag == 'Failed') slackSend color: 'danger', message: "${BUILD_TAG}_${BUILD_TIMESTAMP} ${tag} <${msg}> stage"
-    else slackSend color: 'good', message: "${BUILD_TAG}_${BUILD_TIMESTAMP} ${tag} <${msg}> stage"
+    if (tag == 'Failed') slackSend color: 'danger', message: "${BUILD_TAG} ${tag} <${msg}> stage"
+    else slackSend color: 'good', message: "${BUILD_TAG} ${tag} <${msg}> stage"
 }
