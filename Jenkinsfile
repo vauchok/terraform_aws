@@ -1,5 +1,5 @@
 node('slave') {
-    step('Pull from Git', "checkout scm: [${class}: 'GitSCM', branches: [[name: 'master']], userRemoteConfigs: [[url: 'https://github.com/vauchok/terraform_aws.git/']]]")
+    step('Pull from Git', git())
     step('Terraform check/init', "sh '''
                   terraform -v
                   terraform init
@@ -29,4 +29,8 @@ def step (message, cmd) {
 def slack_notification (message, tag) {
     if ($tag = 'Failed') slackSend color: 'danger', message: "${BUILD_TAG} ${tag} ${message} stage"
     else slackSend color: 'good', message: "${BUILD_TAG} ${tag} ${message} stage"
+}
+
+def git () {
+    checkout scm: [$class: 'GitSCM', branches: [[name: 'master']], userRemoteConfigs: [[url: 'https://github.com/vauchok/terraform_aws.git/']]]
 }
