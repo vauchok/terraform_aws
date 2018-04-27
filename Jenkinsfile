@@ -1,7 +1,7 @@
 node('slave') {
 
   def branch = 'master'
-
+    
     stage('Pull from Git') {
         try {
             checkout scm: [$class: 'GitSCM', branches: [[name: "*/${branch}"]], userRemoteConfigs: [[url: 'https://github.com/vauchok/terraform_aws.git/']]]
@@ -28,6 +28,7 @@ node('slave') {
     stage('terraform plan') {
         try {
             sh 'terraform plan'
+            slackSend color: 'good', message: 'Message from Jenkins Pipeline'
         }
         catch (Exception e){
             slack_notification ("${BUILD_TAG} Failed <terraform plan> stage", "#jenkins-notification", "Ihar Vauchok")
