@@ -7,7 +7,7 @@ node('slave') {
             checkout scm: [$class: 'GitSCM', branches: [[name: "*/${branch}"]], userRemoteConfigs: [[url: 'https://github.com/vauchok/terraform_aws.git/']]]
         }
         catch (Exception e){
-            slack_notification ("${BUILD_TAG} Failed <Pull from Git> stage", "#pipeline", "ivauchok")
+            slack_notification ("${BUILD_TAG} Failed <Pull from Git> stage", "#jenkins-notification", "Ihar Vauchok")
             throw e
         }
     }
@@ -20,7 +20,7 @@ node('slave') {
                 '''
         }
         catch (Exception e){
-            slack_notification ("${BUILD_TAG} Failed <terraform check/init> stage", "#pipeline", "ivauchok")
+            slack_notification ("${BUILD_TAG} Failed <terraform check/init> stage", "#jenkins-notification", "Ihar Vauchok")
             throw e
         }
     }
@@ -30,7 +30,7 @@ node('slave') {
             sh 'terraform plan'
         }
         catch (Exception e){
-            slack_notification ("${BUILD_TAG} Failed <terraform plan> stage", "#pipeline", "ivauchok")
+            slack_notification ("${BUILD_TAG} Failed <terraform plan> stage", "#jenkins-notification", "Ihar Vauchok")
             throw e
         }
     }
@@ -40,7 +40,7 @@ node('slave') {
             sh 'terraform apply -auto-approve'
         }
         catch (Exception e){
-            slack_notification ("${BUILD_TAG} Failed <terraform apply> stage", "#pipeline", "ivauchok")
+            slack_notification ("${BUILD_TAG} Failed <terraform apply> stage", "#jenkins-notification", "Ihar Vauchok")
             throw e
         }
     }
@@ -50,7 +50,7 @@ node('slave') {
             sh 'terraform destroy -auto-approve'
         }
         catch (Exception e){
-            slack_notification ("${BUILD_TAG} Failed <terraform destroy> stage", "#pipeline", "ivauchok")
+            slack_notification ("${BUILD_TAG} Failed <terraform destroy> stage", "#jenkins-notification", "Ihar Vauchok")
             throw e
         }
     }
