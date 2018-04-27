@@ -1,9 +1,9 @@
 node('slave') {
     step('Pull from Git', git())
-    step('Terraform init', "sh terraform init")
-    step('Terraform plan', "sh 'terraform plan'")
-    step('Terraform apply', "sh 'terraform apply -auto-approve'")
-    step('Terraform destroy', "sh 'terraform destroy -auto-approve'")
+    step('Terraform init', "terraform init")
+    step('Terraform plan', "terraform plan")
+    step('Terraform apply', "terraform apply -auto-approve")
+    step('Terraform destroy', "terraform destroy -auto-approve")
     
     stage('Sending status') {
         slackSend color: 'good', message: "${BUILD_TAG} Successful deployment!"
@@ -13,7 +13,7 @@ node('slave') {
 def step (message, cmd) {
     stage(message) {
         try {
-            cmd
+            sh "${cmd}"
         }
         catch (Exception e){
             slack_notification (message, 'Failed')
