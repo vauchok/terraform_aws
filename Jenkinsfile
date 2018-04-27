@@ -1,12 +1,12 @@
 node('slave') {
-    slackSend color: '#439FE0', message: "${BUILD_TAG}_${BUILD_TIMESTAMP} started"
+    slackSend color: '#439FE0', message: "${BUILD_TAG} started in ${BUILD_TIMESTAMP}"
     step('Pull from Git', "git")
     step('Terraform init', "terraform init")
     step('Terraform plan', "terraform plan")
     step('Terraform apply', "terraform apply -auto-approve")
     step('Terraform destroy', "terraform destroy -auto-approve")
     stage('Sending status') {
-        slackSend color: 'good', message: "${BUILD_TAG}_${BUILD_TIMESTAMP} success!"
+        slackSend color: 'good', message: "${BUILD_TAG} success!"
     }
 }
 
