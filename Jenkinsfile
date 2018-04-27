@@ -1,19 +1,9 @@
 node('slave') {
-    stage('Pull from Git') {
-        try {
-            checkout scm
-        }
-        catch (Exception e){
-            slack_notification ('Pull from Git', 'Failed')
-            throw e
-        }
-        slack_notification ('Pull from Git', 'Success')
-    }
+    step('Pull from Git', "git")
     step('Terraform init', "terraform init")
     step('Terraform plan', "terraform plan")
     step('Terraform apply', "terraform apply -auto-approve")
     step('Terraform destroy', "terraform destroy -auto-approve")
-    
     stage('Sending status') {
         slackSend color: 'good', message: "${BUILD_TAG} Successful deployment!"
     }
@@ -22,7 +12,8 @@ node('slave') {
 def step (message, cmd) {
     stage(message) {
         try {
-            sh "${cmd}"
+            if (cmd == 'git') checkout scm
+            else sh "${cmd}"
         }
         catch (Exception e){
             slack_notification (message, 'Failed')
